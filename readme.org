@@ -14,7 +14,7 @@ Execute the code below in an elisp buffer.
 This utility requires a few additional packages, which will be automatically
 downloaded by Emacs' package manager.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_EXAMPLE emacs-lisp
   (require 'package)
   ;; Ensure melpa repository is added.
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
@@ -22,14 +22,14 @@ downloaded by Emacs' package manager.
   ;; Install directly from github.
   (with-current-buffer (url-retrieve-synchronously "github url")
     (call-interactively 'package-install-from-buffer))
-#+END_SRC
+#+END_EXAMPLE
 
 Once you've install the package, add the following to your /init.el/:
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_EXAMPLE emacs-lisp
   (when (equal system-type 'darwin)
     (require 'osx-bbdb))
-#+END_SRC
+#+END_EXAMPLE
 
 * Contributing
 ** TODO Merge fields for existing contacts, instead of skipping.
