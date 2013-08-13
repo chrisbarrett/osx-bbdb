@@ -38,7 +38,7 @@
 ;;; Custom variables
 
 (defgroup osx-bbdb nil
-  ""
+  "Import OS X Address book contacts into BBDB."
   :group 'system
   :prefix "osxb")
 
@@ -69,7 +69,7 @@
            (s-join "\t"
                    '(
                      ;; Names
-                     "%n"                  ; last name
+                     "%n"                   ; last name
                      "%c"                   ; company
                      "%nn"                  ; nickname
                      ;; email
@@ -88,7 +88,7 @@
       name company aka
       home-email work-email other-email
       home-phone mobile-phone main-phone work-phone))
-  "Parse an individual card fields list into the format expected `bbdb-create-internal'."
+  "Parse a list representation of a card into the format expected by `bbdb-create-internal'."
 
   ;; BBDB will bork if it sees empty strings, so define some helper methods that
   ;; translate empty strings to null values.
