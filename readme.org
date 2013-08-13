@@ -32,4 +32,4 @@ Once you've install the package, add the following to your /init.el/:
 #+END_EXAMPLE
 
 * Contributing
-** TODO Merge fields for existing contacts, instead of skipping.
+- TODO Merge fields for existing contacts, instead of skipping.
