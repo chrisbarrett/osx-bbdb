@@ -121,12 +121,12 @@ CONTACTS-SHELL-OUTPUT is the result from `osxb/contacts-to-string'."
     ;; Parse individual cards.
     (-map 'osxb/parse-card)))
 
-(defun osxb/bbdb-contains-record? (record)
+(defun* osxb/bbdb-contains-record?
+    ((&optional name _affix _company _aka mails &rest fields))
   "Check whether BBDB contains an entry with the same name or email address as RECORD."
-  (destructuring-bind (&optional name _affix _company _aka mails &rest rest) record
-    (--any? (or (equal (bbdb-record-name it) name)
-                (-intersection (bbdb-record-mail it) mails))
-            (bbdb-records))))
+  (--any? (or (equal (bbdb-record-name it) name)
+              (-intersection (bbdb-record-mail it) mails))
+          (bbdb-records)))
 
 ;;;###autoload
 (defun import-osx-contacts-to-bbdb (&optional quiet)
