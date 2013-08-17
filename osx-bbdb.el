@@ -142,8 +142,10 @@ When QUIET is non-nil, do not print summary of added items."
       (unless (osxb/bbdb-contains-record? it)
         (apply 'bbdb-create-internal it)
         (incf counter)))
-    ;; Clean up.
+    ;; Clean up and clear minibuffer.
     (bbdb-save)
+    (message nil)
+    ;; Display action summary.
     (unless quiet
       (message "%s %s added to BBDB" counter
                (if (= 1 counter) "contact" "contacts")))))
