@@ -83,6 +83,10 @@
                      "%wp"                  ; work
                      )))))
 
+(defun osxb/split-name (name)
+  "Split NAME into a list of '(firstname lastname)."
+  (s-split (rx (+ space)) name t))
+
 (defun* osxb/parse-card
     ((&optional
       name company aka
@@ -96,11 +100,17 @@
             (maybe-vec (label s) (unless (s-blank? s) (vector label s)))
             (non-null (&rest xs) (-remove 'null xs)))
     (list
-     name
-     nil ; no affix
+     ;; Name
+     (destructuring-bind (fname lname) (osxb/split-name name)
+       (cons fname lname))
+     ;; Affix
+     nil
+     ;; Misc details
      (non-null (maybe aka))
      (non-null (maybe company))
+     ;; Email addresses
      (non-null (maybe home-email) (maybe work-email) (maybe other-email))
+     ;; Phone numbers
      (non-null (maybe-vec "home" home-phone)
                (maybe-vec "mobile" mobile-phone)
                (maybe-vec "main" main-phone)
@@ -116,17 +126,9 @@ CONTACTS-SHELL-OUTPUT is the result from `osxb/contacts-to-string'."
     (--map (-map 's-trim (s-split "\t" it)))
     ;; BBDB requires that names can be split into first+last. Filter degenerate
     ;; cards that don't conform to this.
-    (--filter (let ((name (car it)))
-                (equal 2 (length (s-split-words name)))))
+    (--filter (equal 2 (length (osxb/split-name (car it)))))
     ;; Parse individual cards.
     (-map 'osxb/parse-card)))
-
-(defun* osxb/bbdb-contains-record?
-    ((&optional name _affix _company _aka mails &rest fields))
-  "Check whether BBDB contains an entry with the same name or email address as RECORD."
-  (--any? (or (equal (bbdb-record-name it) name)
-              (-intersection (bbdb-record-mail it) mails))
-          (bbdb-records)))
 
 ;;;###autoload
 (defun import-osx-contacts-to-bbdb (&optional quiet)
@@ -139,7 +141,7 @@ When QUIET is non-nil, do not print summary of added items."
   (let ((counter 0))
     ;; Import contacts.
     (--each (osxb/parse-contacts (osxb/contacts-to-string))
-      (unless (osxb/bbdb-contains-record? it)
+      (ignore-errors
         (apply 'bbdb-create-internal it)
         (incf counter)))
     ;; Clean up and clear minibuffer.
