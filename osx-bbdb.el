@@ -137,7 +137,6 @@ CONTACTS-SHELL-OUTPUT is the result from `osxb/contacts-to-string'."
               (-intersection (bbdb-record-mail it) mails))
           (bbdb-records)))
 
-
 ;;;###autoload
 (defun import-osx-contacts-to-bbdb (&optional quiet)
   "Import contacts from the OS X address book to BBDB.
@@ -150,8 +149,9 @@ When QUIET is non-nil, do not print summary of added items."
     ;; Import contacts.
     (--each (osxb/parse-contacts (osxb/contacts-to-string))
       (unless (osxb/bbdb-contains-record? it)
-        (apply 'bbdb-create-internal it)
-        (incf counter)))
+        (ignore-errors
+          (apply 'bbdb-create-internal it)
+          (incf counter))))
     ;; Clean up and clear minibuffer.
     (bbdb-save)
     (message nil)
