@@ -3,7 +3,7 @@
 ;; Copyright (C) 2013 Chris Barrett
 
 ;; Author: Chris Barrett <chris.d.barrett@me.com>
-;; Version: 0.2
+;; Version: 0.2.1
 ;; Package-Requires: ((s "1.6.1") (dash "1.5.0") (cl-lib "0.2") (bbdb "20130728.2143"))
 ;; This file is not part of GNU Emacs.
 
