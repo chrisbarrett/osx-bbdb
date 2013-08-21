@@ -130,6 +130,14 @@ CONTACTS-SHELL-OUTPUT is the result from `osxb/contacts-to-string'."
     ;; Parse individual cards.
     (-map 'osxb/parse-card)))
 
+(defun* osxb/bbdb-contains-record?
+    ((&optional name _affix _company _aka mails &rest fields))
+  "Check whether BBDB contains an entry with the same name or email address as RECORD."
+  (--any? (or (equal (bbdb-record-name it) name)
+              (-intersection (bbdb-record-mail it) mails))
+          (bbdb-records)))
+
+
 ;;;###autoload
 (defun import-osx-contacts-to-bbdb (&optional quiet)
   "Import contacts from the OS X address book to BBDB.
@@ -141,7 +149,7 @@ When QUIET is non-nil, do not print summary of added items."
   (let ((counter 0))
     ;; Import contacts.
     (--each (osxb/parse-contacts (osxb/contacts-to-string))
-      (ignore-errors
+      (unless (osxb/bbdb-contains-record? it)
         (apply 'bbdb-create-internal it)
         (incf counter)))
     ;; Clean up and clear minibuffer.
