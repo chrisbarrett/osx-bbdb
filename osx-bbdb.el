@@ -87,7 +87,7 @@
   "Split NAME into a list of '(firstname lastname)."
   (s-split (rx (+ space)) name t))
 
-(defun* osxb/parse-card
+(cl-defun osxb/parse-card
     ((&optional
       name company aka
       home-email work-email other-email
@@ -130,7 +130,7 @@ CONTACTS-SHELL-OUTPUT is the result from `osxb/contacts-to-string'."
     ;; Parse individual cards.
     (-map 'osxb/parse-card)))
 
-(defun* osxb/bbdb-contains-record?
+(cl-defun osxb/bbdb-contains-record?
     ((&optional name _affix _company _aka mails &rest fields))
   "Check whether BBDB contains an entry with the same name or email address as RECORD."
   (--any? (or (equal (bbdb-record-name it) name)
