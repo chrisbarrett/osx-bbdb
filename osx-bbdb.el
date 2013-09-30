@@ -29,11 +29,7 @@
 (require 'cl-lib)
 (require 's)
 (require 'dash)
-(autoload 'bbdb-record-name "bbdb")
-(autoload 'bbdb-record-mail "bbdb")
-(autoload 'bbdb-create-internal "bbdb-com")
-(autoload 'bbdb-records "bbdb")
-(autoload 'bbdb-save "bbdb")
+(require 'bbdb)
 
 ;;; Custom variables
 
@@ -147,23 +143,22 @@ When QUIET is non-nil, do not print summary of added items."
 
   ;; Prevent messages from being logged when running quietly (i.e. on a timer).
   (let ((inhibit-redisplay quiet)
-        (message-log-max (if quiet nil message-log-max)))
+        (message-log-max (if quiet nil message-log-max))
 
-    (require 'bbdb)
-    (let ((counter 0))
-      ;; Import contacts.
-      (--each (osxb/parse-contacts (osxb/contacts-to-string))
-        (unless (osxb/bbdb-contains-record? it)
-          (ignore-errors
-            (apply 'bbdb-create-internal it)
-            (cl-incf counter))))
-      ;; Clean up and clear minibuffer.
-      (bbdb-save)
-      (message nil)
-      ;; Display action summary.
-      (unless quiet
-        (message "%s %s added to BBDB" counter
-                 (if (= 1 counter) "contact" "contacts"))))))
+        (counter 0))
+    ;; Import contacts.
+    (--each (osxb/parse-contacts (osxb/contacts-to-string))
+      (unless (osxb/bbdb-contains-record? it)
+        (ignore-errors
+          (apply 'bbdb-create-internal it)
+          (cl-incf counter))))
+    ;; Clean up and clear minibuffer.
+    (bbdb-save)
+    (message nil)
+    ;; Display action summary.
+    (unless quiet
+      (message "%s %s added to BBDB" counter
+               (if (= 1 counter) "contact" "contacts")))))
 
 (provide 'osx-bbdb)
 
