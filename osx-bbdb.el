@@ -30,6 +30,7 @@
 (require 's)
 (require 'dash)
 (require 'bbdb)
+(autoload 'bbdb-create-internal "bbdb-com")
 
 ;;; Custom variables
 
@@ -161,9 +162,5 @@ When QUIET is non-nil, do not print summary of added items."
                (if (= 1 counter) "contact" "contacts")))))
 
 (provide 'osx-bbdb)
-
-;; Local Variables:
-;; lexical-binding: t
-;; End:
 
 ;;; osx-bbdb.el ends here
