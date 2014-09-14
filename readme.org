@@ -9,7 +9,11 @@ your OS X Address Book into BBDB. It also uses a timer to periodically add new c
 Requires Emacs 24+, tested on OS X 10.8.
 
 * Installation
-Paste the code below into an elisp buffer, then =M-x eval-buffer=.
+#+BEGIN_SRC
+brew install contacts
+#+END_SRC
+
+then paste the code below into an elisp buffer, then =M-x eval-buffer=.
 
 #+BEGIN_SRC emacs-lisp
   (require 'package)
